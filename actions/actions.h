@@ -14,7 +14,7 @@
 
 #define ARRAYSIZE 300
 
-extern char *pointer; /* There should only ever be one pointer to this one array. */
+extern unsigned char *pointer; /* There should only ever be one pointer to this one array. */
 
 #endif // ACTIONS_H
 
