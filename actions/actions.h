@@ -12,7 +12,6 @@
 #ifndef ACTIONS_H
 #define ACTIONS_H
 
-#define ARRAYSIZE 300
 extern unsigned char array[];
 extern unsigned char *pointer; /* There should only ever be one pointer to this one array. */
 
@@ -22,8 +21,14 @@ extern void movePointerRight();
 
 extern void movePointerLeft();
 
-extern void performAction(char character);
+extern void performAction(char character, FILE *instructionStrip);
 
 extern void incrementCell();
 
 extern void decrementCell();
+
+extern void outputCell();
+
+extern void loopStarter();
+
+extern void loopEnder();

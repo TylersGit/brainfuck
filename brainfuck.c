@@ -10,19 +10,37 @@
  */
 
 #include <stdio.h>
+#include <stdlib.h>
 #include "actions/actions.h"
 
-char instructions[] = {'>', '+', '<', '-', '-', '+', '+'}; /* Instruction strip */
+char instruction;
 
 int main(int argc, char *argv[])
 {
-    printf("pointer :>> %p\n", (void *)pointer);
+    FILE *instructionsStrip = fopen("HelloWorld.txt", "r");
 
-    for (int instruction = 0; instruction < sizeof(instructions) / sizeof(*instructions); instruction++)
+    // Check that the instruction file exists
+    if (instructionsStrip == NULL)
     {
-        performAction(instructions[instruction]);
-        printf(" :>> %d %d %d \n", *array, *(array + 1), *(array + 2));
+        fprintf(stderr, "Instructions file not found.\n");
+        exit(1);
     }
 
+    printf("pointer :>> %p\n", (void *)pointer);
+
+    while (1)
+    {
+        instruction = fgetc(instructionsStrip);
+        if (instruction != EOF)
+        {
+            performAction(instruction, instructionsStrip);
+        }
+        else
+        {
+            break;
+        }
+    }
+
+    fclose(instructionsStrip);
     return 0;
 }

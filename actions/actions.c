@@ -14,52 +14,88 @@
 unsigned char array[ARRAYSIZE];
 unsigned char *pointer = array; /* There should only ever be one pointer to this one array. */
 
-// >	Increment the data pointer (to point to the next cell to the right).
-// <	Decrement the data pointer (to point to the next cell to the left).
-// +	Increment (increase by one) the byte at the data pointer.
-// -	Decrement (decrease by one) the byte at the data pointer.
-// .	Output the byte at the data pointer.
+int loopFlag = 0; /* Is a loop currently being registered */
+
 // ,	Accept one byte of input, storing its value in the byte at the data pointer.
-// [	If the byte at the data pointer is zero, then instead of moving the instruction pointer forward to the next command, jump it forward to the command after the matching ] command.
-// ]	If the byte at the data pointer is nonzero, then instead of moving the instruction pointer forward to the next command, jump it back to the command after the matching [ command.
 
 void movePointerRight()
 {
-    // printf("pointer start :>> %p\n", (void *)pointer);
     *(pointer++);
-    // printf("pointer end :>> %p\n", (void *)pointer);
 }
 
 void movePointerLeft()
 {
-    // printf("pointer start :>> %p\n", (void *)pointer);
     *(pointer--);
-    // printf("pointer end :>> %p\n", (void *)pointer);
 }
 
 void incrementCell()
 {
-    printf("+\n");
     (*pointer)++;
 };
 
 void decrementCell()
 {
-    printf("-\n");
     (*pointer)--;
 };
 
-void performAction(char character)
+void outputCell()
+{
+    // Do not output a new line.
+    // New line characters must be output explicitely by the brainfuck instruction strip.
+    printf("%c", *pointer);
+}
+
+// '['	If the byte at the data pointer is zero, then instead of moving the instruction pointer forward to the next command, jump it forward to the command after the matching ']' command.
+void loopStarter(FILE *strip)
+{
+    char testCharacter;
+
+    // Check if the current byte is equal to 0.
+    if (*pointer == 0)
+    {
+        while (1)
+        {
+            // Skip until the next ']' char
+            testCharacter = fgetc(strip);
+            if (testCharacter == ']')
+            {
+                break;
+            }
+        }
+    }
+}
+
+// ]	If the byte at the data pointer is nonzero, then instead of moving the instruction pointer forward to the next command, jump it back to the command after the matching [ command.
+void loopEnder(FILE *strip)
+{
+    char testCharacter;
+
+    // Check if byte is a non zero character
+    if (*pointer != 0)
+    {
+        while (1)
+        {
+            // Place the cursor two characters back.
+            // This makes fgetc get the previous character in the file.
+            fseek(strip, -2, SEEK_CUR);
+            testCharacter = fgetc(strip);
+            if (testCharacter == '[')
+            {
+                break;
+            }
+        }
+    }
+}
+
+void performAction(char character, FILE *instructionStrip)
 {
     switch (character)
     {
     case '>':
         movePointerRight();
-        printf("Right\n");
         break;
     case '<':
         movePointerLeft();
-        printf("Left\n");
         break;
     case '+':
         incrementCell();
@@ -67,7 +103,19 @@ void performAction(char character)
     case '-':
         decrementCell();
         break;
+    case '.':
+        outputCell();
+        break;
+    case '[':
+        loopStarter(instructionStrip);
+        break;
+    case ']':
+        loopEnder(instructionStrip);
+        break;
+    case '\n':
+        break;
     default:
+        printf("%c Instruction skipped\n", character);
         break;
     }
 }
