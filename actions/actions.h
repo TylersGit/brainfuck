@@ -13,7 +13,7 @@
 #define ACTIONS_H
 
 #define ARRAYSIZE 300
-
+extern unsigned char array[];
 extern unsigned char *pointer; /* There should only ever be one pointer to this one array. */
 
 #endif // ACTIONS_H

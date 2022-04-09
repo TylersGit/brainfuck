@@ -21,7 +21,7 @@ int main(int argc, char *argv[])
     for (int instruction = 0; instruction < sizeof(instructions) / sizeof(*instructions); instruction++)
     {
         performAction(instructions[instruction]);
-        printf(" :>> %d %d %d \n", *pointer, *(pointer + 1), *(pointer + 2));
+        printf(" :>> %d %d %d \n", *array, *(array + 1), *(array + 2));
     }
 
     return 0;
