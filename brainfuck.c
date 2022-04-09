@@ -10,7 +10,7 @@
  */
 
 #include <stdio.h>
-
+#include "actions/actions.h"
 // >	Increment the data pointer (to point to the next cell to the right).
 // <	Decrement the data pointer (to point to the next cell to the left).
 // +	Increment (increase by one) the byte at the data pointer.
@@ -26,43 +26,6 @@ char array[ARRAYSIZE];
 char *pointer = array; /* There should only ever be one pointer to this one array. */
 
 char instructions[] = {'>', '+', '>', '+', '<', '-', '-'}; /* Instruction strip */
-
-void movePointerRight()
-{
-    printf("pointer start :>> %p\n", (void *)pointer);
-    *(pointer++);
-    printf("pointer end :>> %p\n", (void *)pointer);
-}
-
-void movePointerLeft()
-{
-    printf("pointer start :>> %p\n", (void *)pointer);
-    *(pointer--);
-    printf("pointer end :>> %p\n", (void *)pointer);
-}
-
-void performAction(char character)
-{
-    switch (character)
-    {
-    case '>':
-        movePointerRight();
-        printf("Right\n");
-        break;
-    case '<':
-        movePointerLeft();
-        printf("Left\n");
-        break;
-    case '+':
-        incrementCell();
-        break;
-    case '-':
-        decrementCell();
-        break;
-    default:
-        break;
-    }
-}
 
 int main(int argc, char *argv[])
 {
